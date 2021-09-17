@@ -23,7 +23,7 @@ API
 # Index handler
 curl localhost:8080
 
-# Fetch date from database
+# Fetch data from database
 curl localhost:8080/db
 # Output example:
 # [{1,<<"Alice">>},{2,<<"Bob">>},{3,<<233,133,183,229,147,165>>}]
