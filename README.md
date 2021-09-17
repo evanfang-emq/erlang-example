@@ -1,7 +1,9 @@
 hello_server
 =====
 
-An OTP application
+An OTP application.
+
+A simple example showing how to use `cowboy` and connect to postgreSQL database by `epgsql`.
 
 Build
 -----
