@@ -20,7 +20,10 @@ start(_StartType, _StartArgs) ->
     {ok, _} = cowboy:start_clear(hello_listener,
                                  [{port, 8080}],
                                  #{env => #{dispatch => Dispatch},
-                                   middlewares => [time_logger_middleware]}),
+                                   middlewares => [
+                                       cowboy_router,
+                                       time_logger_middleware,
+                                       cowboy_handler]}),
     hello_server_sup:start_link().
 
 stop(_State) -> ok.
