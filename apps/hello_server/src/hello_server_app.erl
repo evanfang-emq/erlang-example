@@ -19,7 +19,8 @@ start(_StartType, _StartArgs) ->
                                  {<<"/db">>, db_handler, []}]}]),
     {ok, _} = cowboy:start_clear(hello_listener,
                                  [{port, 8080}],
-                                 #{env => #{dispatch => Dispatch}}),
+                                 #{env => #{dispatch => Dispatch},
+                                   middlewares => [time_logger_middleware]}),
     hello_server_sup:start_link().
 
 stop(_State) -> ok.
