@@ -5,7 +5,19 @@
 -export([execute/2]).
 
 execute(Req, Env) ->
-    case application:get_env(hello_server, rate_limit_type) of
+    % Check if api handler has rate limit setup
+    % if no, use default rate
+    HandlerName = maps:get(handler, Env, undefined),
+    case throttle:peek(HandlerName, 0) of
+        rate_not_set ->
+            lager:info("handler has no rate limit setup, use "
+                       "default rate"),
+            Scope = default_api_rate;
+        _ ->
+            Scope = HandlerName
+    end,
+    case application:get_env(hello_server, rate_limit_type)
+        of
         {ok, ip} ->
             lager:info("rate limit by ip"),
             % https://ninenines.eu/docs/en/cowboy/2.9/manual/cowboy_req.peer/
@@ -18,7 +30,7 @@ execute(Req, Env) ->
                                               Req),
             Token = Authorization
     end,
-    case throttle:check(api_rate, Token) of
+    case throttle:check(Scope, Token) of
         {limit_exceeded, _, _} ->
             lager:warning("Exceeded api limit, token: ~p", [Token]),
             Req2 = cowboy_req:reply(429,

@@ -16,11 +16,16 @@ start(_StartType, _StartArgs) ->
 
     % setup throttling
     % Allowed rate periods are per_second, per_minute, per_hour and per_day
-    throttle:setup(api_rate, 1, per_second),
+
+    % setup throttling for each hander
+    throttle:setup(user_handler, 1, per_minute),
+    throttle:setup(product_handler, 1, per_minute),
 
     % server
     Dispatch = cowboy_router:compile([{'_', % must use SINGLE quote
                                 [{<<"/">>, index_handler, []},
+                                 {<<"/user">>, user_handler, []},
+                                 {<<"/product">>, product_handler, []},
                                  {<<"/db">>, db_handler, []}]}]),
     {ok, _} = cowboy:start_clear(hello_listener,
                                  [{port, 8080}],
