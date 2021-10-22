@@ -7,7 +7,7 @@
 execute(Req, Env) ->
     % Check if api handler has rate limit setup
     % if no, use default rate
-    HandlerName = maps:get(handler, Env, undefined),
+    HandlerName = maps:get(handler, Env),
     case throttle:peek(HandlerName, 0) of
         rate_not_set ->
             lager:info("handler has no rate limit setup, use "
