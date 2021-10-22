@@ -15,6 +15,7 @@ start(_StartType, _StartArgs) ->
     lager:info("server is listening on port 8080"),
 
     % setup throttling
+    % Allowed rate periods are per_second, per_minute, per_hour and per_day
     throttle:setup(api_rate, 1, per_second),
 
     % server

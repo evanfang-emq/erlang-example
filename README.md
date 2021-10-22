@@ -46,3 +46,13 @@ Applications in .src file
     cowboy
    ]},
 ```
+
+Envs
+---
+
+### sys.config
+
+- `rate_limit_type` could be `ip` or `authorization`
+> Could use CURL command to send request with authorization header, like:
+>
+> curl -H "Authorization: hello" localhost:8080
