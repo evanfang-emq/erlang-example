@@ -56,3 +56,22 @@ Envs
 > Could use CURL command to send request with authorization header, like:
 >
 > curl -H "Authorization: hello" localhost:8080
+
+### Distributed Throttling
+
+```sh
+# start node1
+rebar3 shell --sname node1@localhost --config config/sys.node1.config
+
+# start node2
+rebar3 shell --sname node2@localhost --config config/sys.node2.config
+```
+
+In node1 REPL:
+```sh
+# connect to node2
+net_adm:ping(node2@localhost).
+
+# start distributed throttling
+throttle_mnesia:setup().
+```

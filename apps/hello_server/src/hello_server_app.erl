@@ -12,7 +12,9 @@
 start(_StartType, _StartArgs) ->
     % start lagger
     lager:start(),
-    lager:info("server is listening on port 8080"),
+
+    {ok, Port} = application:get_env(hello_server, port),
+    lager:info("server is listening on port: ~p", [Port]),
 
     % setup throttling
     % Allowed rate periods are per_second, per_minute, per_hour and per_day
@@ -28,7 +30,7 @@ start(_StartType, _StartArgs) ->
                                  {<<"/product">>, product_handler, []},
                                  {<<"/db">>, db_handler, []}]}]),
     {ok, _} = cowboy:start_clear(hello_listener,
-                                 [{port, 8080}],
+                                 [{port, Port}],
                                  #{env => #{dispatch => Dispatch},
                                    middlewares => [
                                        cowboy_router,
